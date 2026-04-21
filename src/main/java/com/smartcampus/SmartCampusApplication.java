@@ -9,5 +9,5 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/api/v1")
 public class SmartCampusApplication extends Application {
     // Jersey auto-scans the classpath for @Provider and @Path classes when
-    // the Application subclass returns empty sets from getClasses() 
+    // the Application subclass returns empty sets from getClasses()   
 }
