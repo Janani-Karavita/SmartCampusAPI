@@ -10,6 +10,7 @@ import java.io.IOException;
 /**
  * Minimal request/response logging filter for debugging purposes.
  */
+
 @Provider
 public class RequestLoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
