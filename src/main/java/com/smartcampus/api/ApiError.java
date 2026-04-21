@@ -1,5 +1,4 @@
 package com.smartcampus.api;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;
