@@ -5,6 +5,8 @@ public class SensorReading {
     private long timestamp;
     private double value;
 
+    public SensorReading() {}
+    
     public SensorReading(String id, long timestamp, double value){
         this.id = id;
         this.timestamp = timestamp;
@@ -19,11 +21,11 @@ public class SensorReading {
         this.id = id;
     }
     
-    public long getTimeStamp(){
+    public long getTimestamp(){
         return timestamp;
     }
     
-    public void setTimeStamp(long timestamp){
+    public void setTimestamp(long timestamp){
         this.timestamp = timestamp;
     }
     

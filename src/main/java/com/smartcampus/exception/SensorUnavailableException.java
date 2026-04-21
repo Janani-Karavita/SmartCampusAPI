@@ -1,5 +1,4 @@
 package com.smartcampus.exception;
-
 /**
  * Exception thrown when a sensor is unavailable.
  */

@@ -7,6 +7,8 @@ public class Sensor {
     private double currentValue;
     private String roomId;
 
+    public Sensor() {}
+
     public Sensor(String id, String type, String status, double CurrentValue, String roomId){
         this.id = id;
         this.type = type;

@@ -35,6 +35,8 @@ public class APIExceptionMapper implements ExceptionMapper<ApiException> {
         if ("NOT_FOUND".equals(code)) return 404;
         if ("CONFLICT".equals(code)) return 409;
         if ("UNPROCESSABLE_ENTITY".equals(code)) return 422;
+        if("ROOM_NOT_EMPTY".equals(code)) return 409;
+        if("LINKED_RESOURCE_NOT_FOUND".equals(code)) return 422;
         return 400;
     }
 }

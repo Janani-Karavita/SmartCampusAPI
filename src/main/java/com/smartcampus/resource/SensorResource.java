@@ -2,6 +2,7 @@ package com.smartcampus.resource;
 
 import com.smartcampus.exception.BadRequestException;
 import com.smartcampus.exception.ConflictException;
+import com.smartcampus.exception.LinkedResourceNotFoundException;
 import com.smartcampus.exception.NotFoundException;
 import com.smartcampus.exception.UnprocessableEntityException;
 import com.smartcampus.model.Room;
@@ -69,7 +70,7 @@ public class SensorResource {
 
         Room room = dataStore.getRoom(sensor.getRoomId());
         if (room == null) {
-            throw new UnprocessableEntityException("Referenced roomId does not exist");
+            throw new LinkedResourceNotFoundException("Referenced roomId does not exist");
         }
 
         boolean alreadyExists = dataStore.getSensor(sensor.getId()) != null;
@@ -121,7 +122,7 @@ public class SensorResource {
         
         Room newRoom = dataStore.getRoom(updated.getRoomId());
         if (newRoom == null) {
-            throw new UnprocessableEntityException("Referenced roomId does not exist");
+            throw new LinkedResourceNotFoundException("Referenced roomId does not exist");
         }
 
         

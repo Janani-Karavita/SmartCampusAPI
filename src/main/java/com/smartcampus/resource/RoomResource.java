@@ -3,6 +3,7 @@ package com.smartcampus.resource;
 import com.smartcampus.exception.BadRequestException;
 import com.smartcampus.exception.ConflictException;
 import com.smartcampus.exception.NotFoundException;
+import com.smartcampus.exception.RoomNotEmptyException;
 import com.smartcampus.model.Room;
 import com.smartcampus.store.DataStore;
 
@@ -52,11 +53,6 @@ public class RoomResource {
             throw new BadRequestException("Room capacity must be >= 0");
         }
 
-        // Keep JSON consistent: ensure sensorIds is never null.
-        if (room.getSensorIds() == null) {
-            room.setSensorIds(null);
-        }
-
         boolean alreadyExists = dataStore.getRoom(room.getId()) != null;
         if (alreadyExists) {
             throw new ConflictException("Room with id already exists");
@@ -79,7 +75,7 @@ public class RoomResource {
 
         // a room cannot be deleted if it has sensors
         if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
-            throw new ConflictException("Room cannot be deleted while sensors are assigned");
+            throw new RoomNotEmptyException("Room cannot be deleted while sensors are assigned");
         }
 
         dataStore.deleteRoom(id);

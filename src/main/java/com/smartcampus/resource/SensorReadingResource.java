@@ -55,8 +55,8 @@ public class SensorReadingResource {
         }
 
         //Offline sensors reject new readings.
-        if (sensor.getStatus() != null && sensor.getStatus().equalsIgnoreCase("OFFLINE")) {
-            throw new SensorUnavailableException("Sensor is OFFLINE and cannot accept readings");
+        if (sensor.getStatus() != null && sensor.getStatus().equalsIgnoreCase("MAINTENANCE")) {
+            throw new SensorUnavailableException("Sensor is in MAINTENANCE and cannot accept readings");
         }
 
         if (reading == null || reading.getId() == null || reading.getId().trim().isEmpty()) {
