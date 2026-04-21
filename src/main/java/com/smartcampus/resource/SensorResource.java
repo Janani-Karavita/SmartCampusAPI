@@ -4,7 +4,6 @@ import com.smartcampus.exception.BadRequestException;
 import com.smartcampus.exception.ConflictException;
 import com.smartcampus.exception.LinkedResourceNotFoundException;
 import com.smartcampus.exception.NotFoundException;
-import com.smartcampus.exception.UnprocessableEntityException;
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
 import com.smartcampus.store.DataStore;
