@@ -230,9 +230,8 @@ A 404 Not Found response conventionally means the requested URL itself does not 
 server. When a client POSTs a sensor with a roomId that does not exist, the request URL
 /api/v1/sensors is perfectly valid the resource is there. 
 
-The problem is inside the request body:
+The problem is inside the request body: the referenced roomId is a foreign key that cannot be resolved.
 
-the referenced roomId is a foreign key that cannot be resolved.
 HTTP 422 Unprocessable Entity is designed precisely for this situation. It signals that the request
 was syntactically correct JSON (the server could parse it), but the content fails a semantic or
 business rule validation. Returning 422 makes it clear to the client that it needs to fix the data in the
