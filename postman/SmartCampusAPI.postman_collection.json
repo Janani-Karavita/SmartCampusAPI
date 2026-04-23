@@ -1,0 +1,327 @@
+{
+  "info": {
+    "name": "Smart Campus API",
+    "_postman_id": "smart-campus-api-5cosc022w",
+    "description": "Postman collection for 5COSC022W Smart Campus Sensor & Room Management API. Built with JAX-RS (Jersey) on embedded Jetty at http://localhost:8080/api/v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Part 1 – Discovery",
+      "item": [
+        {
+          "name": "01 GET Discovery Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}",
+              "host": ["{{baseUrl}}"]
+            },
+            "description": "Returns API metadata: version, contact info, and HATEOAS links to /rooms and /sensors. Part 1 Task 2."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Part 2 – Room Management",
+      "item": [
+        {
+          "name": "02 POST Create Room (LIB-301)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"LIB-301\",\n  \"name\": \"Library Quiet Study\",\n  \"capacity\": 50\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["rooms"]
+            },
+            "description": "Creates room LIB-301. Returns 201 Created with full Room object and Location header."
+          },
+          "response": []
+        },
+        {
+          "name": "03 GET All Rooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["rooms"]
+            },
+            "description": "Returns all rooms from the in-memory DataStore as a JSON array."
+          },
+          "response": []
+        },
+        {
+          "name": "04 GET Room by ID (LIB-301)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/LIB-301",
+              "host": ["{{baseUrl}}"],
+              "path": ["rooms", "LIB-301"]
+            },
+            "description": "Fetches the full metadata for room LIB-301. Returns 200 OK."
+          },
+          "response": []
+        },
+        {
+          "name": "05 DELETE Room with Sensors – 409 Conflict",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/LIB-301",
+              "host": ["{{baseUrl}}"],
+              "path": ["rooms", "LIB-301"]
+            },
+            "description": "Run AFTER sensors are created. LIB-301 has sensors assigned so deletion is blocked. RoomNotEmptyException → 409 Conflict."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Part 3 – Sensor Operations",
+      "item": [
+        {
+          "name": "06 POST Create Sensor ACTIVE (TEMP-001)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"TEMP-001\",\n  \"type\": \"Temperature\",\n  \"status\": \"ACTIVE\",\n  \"currentValue\": 0.0,\n  \"roomId\": \"LIB-301\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors"]
+            },
+            "description": "Creates an ACTIVE Temperature sensor linked to LIB-301. Returns 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "07 POST Create Sensor MAINTENANCE (TEMP-002)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"TEMP-002\",\n  \"type\": \"Temperature\",\n  \"status\": \"MAINTENANCE\",\n  \"currentValue\": 0.0,\n  \"roomId\": \"LIB-301\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors"]
+            },
+            "description": "Creates a MAINTENANCE sensor in LIB-301. Used to demonstrate SensorUnavailableException (403) in Part 5."
+          },
+          "response": []
+        },
+        {
+          "name": "08 POST Create Sensor – Invalid roomId (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"CO2-999\",\n  \"type\": \"CO2\",\n  \"status\": \"ACTIVE\",\n  \"currentValue\": 0.0,\n  \"roomId\": \"DOES-NOT-EXIST\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors"]
+            },
+            "description": "Demonstrates LinkedResourceNotFoundException → 422 Unprocessable Entity. The roomId does not exist in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "09 GET Sensors – Filter by type=Temperature",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sensors?type=Temperature",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Temperature"
+                }
+              ]
+            },
+            "description": "Uses @QueryParam 'type' to filter sensors. Returns only Temperature type sensors."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Part 4 – Sensor Readings (Sub-Resource)",
+      "item": [
+        {
+          "name": "10 POST Add First Reading to TEMP-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"READ-001\",\n  \"timestamp\": 1713780000000,\n  \"value\": 22.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors/TEMP-001/readings",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors", "TEMP-001", "readings"]
+            },
+            "description": "Adds first reading to TEMP-001. Side effect: currentValue on the sensor is updated to 22.5. Returns 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "11 POST Add Second Reading to TEMP-001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"READ-002\",\n  \"timestamp\": 1713783600000,\n  \"value\": 23.8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors/TEMP-001/readings",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors", "TEMP-001", "readings"]
+            },
+            "description": "Adds second reading. currentValue on TEMP-001 is now updated to 23.8."
+          },
+          "response": []
+        },
+        {
+          "name": "12 GET Reading History for TEMP-001",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sensors/TEMP-001/readings",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors", "TEMP-001", "readings"]
+            },
+            "description": "Retrieves full reading history for TEMP-001. Returns READ-001 and READ-002 in order."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Part 5 – Error Handling",
+      "item": [
+        {
+          "name": "13 POST Reading to MAINTENANCE Sensor – 403 Forbidden",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"READ-ERR-001\",\n  \"timestamp\": 1713780000000,\n  \"value\": 19.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sensors/TEMP-002/readings",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors", "TEMP-002", "readings"]
+            },
+            "description": "TEMP-002 status is MAINTENANCE. Demonstrates SensorUnavailableException → 403 Forbidden with structured JSON error body."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
